@@ -8,18 +8,18 @@ fs.writeFile(path.join(__dirname, 'main1', 'test.txt'), 'SOME TEXT', err => {
         console.log(err);
         throw err;
     }
-    fs.readFile(path.join(__dirname, 'main1', 'test.txt'), (err, data) => {
-        if(err){
+  })
+fs.readFile(path.join(__dirname, 'main1', 'test.txt'), (err, data) => {
+    if(err){
+        console.log(err);
+        throw err;
+    }
+
+    fs.writeFile(path.join(__dirname, 'main1', 'test2.txt'), data, err => {
+        if (err) {
             console.log(err);
             throw err;
         }
-
-        fs.writeFile(path.join(__dirname, 'main1', 'test2.txt'), data, err => {
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-        })
     })
 })
 
