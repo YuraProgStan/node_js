@@ -1,0 +1,3 @@
+NAME:Oleg, AGE:32, CITY: Odessa
+NAME:Oksana, AGE:25, CITY: Kyiv
+NAME:Maksim, AGE:31, CITY: Poltava
