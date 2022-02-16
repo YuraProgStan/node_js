@@ -8,25 +8,6 @@
 const fs = require('fs');
 const path = require('path');
 
-fs.mkdir(path.join(__dirname, 'main'), (err) => {
-    if(err){
-        console.log(err);
-        throw err;
-    }
-})
-fs.mkdir(path.join(__dirname, 'main', 'online'), (err) =>{
-    if(err){
-        console.log(err);
-        throw err;
-    }
-})
-
-fs.mkdir(path.join(__dirname, 'main', 'inPerson'), (err) =>{
-    if(err){
-        console.log(err);
-        throw err;
-    }
-})
 const onlineUsers = [{name: 'Andrii', age: 22, city: 'Lviv'},
     {name: 'Anna', age: 25, city: 'Kyiv'},
     {name: 'Sergii', age: 30, city: 'Kharkiv'}];
@@ -34,38 +15,39 @@ const inPersonUsers = [{name: 'Oleg', age: 32, city: 'Odessa'},
     {name: 'Oksana', age: 25, city: 'Kyiv'},
     {name: 'Maksim', age: 31, city: 'Poltava'}]
 
-
-fs.writeFile(path.join(__dirname, 'main', 'online','onlineUsers.txt'), '', (err) => {
-    if(err){
-        console.log(err);
-        throw err;
-    }
-})
-
-fs.writeFile(path.join(__dirname, 'main', 'inPerson','inPersonUsers.txt'), '', (err) => {
-    if(err){
-        console.log(err);
-        throw err;
-    }
-})
-
-onlineUsers.map(value => fs.appendFile (path.join(__dirname, 'main', 'online','onlineUsers.txt'),
-    `NAME:${value.name}, AGE:${value.age}, CITY: ${value.city}\n`, (err) => {
-    if(err){
-        console.log(err);
-        throw err;
-    }
-}) )
-
-inPersonUsers.map(value => fs.appendFile (path.join(__dirname, 'main', 'inPerson','inPersonUsers.txt'),
-    `NAME:${value.name}, AGE:${value.age}, CITY: ${value.city}\n`, (err) => {
-        if(err){
+    fs.mkdir(path.join(__dirname, 'main'), (err) => {
+        if (err) {
             console.log(err);
             throw err;
         }
-    }) )
-
-
+        const folderFileArrayWrite = (folder, file, arr) => {
+            fs.mkdir(path.join(__dirname, 'main', folder), (err) => {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+                const pathUsers = path.join(__dirname, 'main', folder, file);
+                fs.writeFile(pathUsers, '', (err) => {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+                    arr.map(value => fs.appendFile(pathUsers,
+                        `NAME:${value.name}, AGE:${value.age}, CITY: ${value.city}\n`, (err) => {
+                            if (err) {
+                                console.log(err);
+                                throw err;
+                            }
+                        }))
+                    if (folder === 'inPerson') {
+                        changeUsers()
+                    }
+                })
+            })
+        }
+        folderFileArrayWrite('online', 'onlineUsers.txt', onlineUsers);
+        folderFileArrayWrite('inPerson', 'inPersonUsers.txt', inPersonUsers);
+    })
 
 const changeUsers = () => {
     fs.rename(path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), (err) => {
@@ -73,12 +55,12 @@ const changeUsers = () => {
             console.log(err);
             throw err;
         }
-        fs.rename(path.join(__dirname, 'main',  'inPerson', 'inPersonUsers.txt'), path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), (err) => {
+        fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), (err) => {
             if (err) {
                 console.log(err);
                 throw err;
             }
-            fs.rename(path.join(__dirname, 'main',  'inPerson', 'inPersonUsersTemp.txt'), path.join(__dirname, 'main',  'inPerson', 'inPersonUsers.txt'), (err) => {
+            fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), (err) => {
                 if (err) {
                     console.log(err);
                     throw err;
@@ -87,4 +69,16 @@ const changeUsers = () => {
         })
     });
 }
-changeUsers();
+
+
+
+
+
+
+
+
+
+
+
+
+
