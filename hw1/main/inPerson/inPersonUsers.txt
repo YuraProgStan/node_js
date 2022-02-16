@@ -1,3 +1,0 @@
-NAME:Andrii, AGE:22, CITY: Lviv
-NAME:Anna, AGE:25, CITY: Kyiv
-NAME:Sergii, AGE:30, CITY: Kharkiv
