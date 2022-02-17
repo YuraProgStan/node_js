@@ -62,6 +62,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'static')));
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 app.set('view engine', '.hbs');
 app.engine('.hbs', engine({defaultLayout: false}));
 app.set('views', path.join(__dirname, 'static'));
@@ -127,13 +129,13 @@ app.post('/signIn', (req, res) => {
 
 });
 
-app.post('/user', (req, res) => {
+app.use(methodOverride( (req, res) => {
     const indexUsers = users.findIndex(value => value.email === req.body.email);
     users.splice(indexUsers, 1);
     const indexSignUser = signUser.findIndex(value => value.email === req.body.email);
     signUser.splice(indexSignUser, 1);
     res.redirect('users');
-});
+}));
 
 app.use((req, res) => {
     res.render('notFound');
