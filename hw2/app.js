@@ -75,12 +75,13 @@ app.set('view engine', '.hbs');
 app.engine('.hbs', engine({defaultLayout: ''}));
 app.set('views', path.join(__dirname, 'static'));
 
+
+
 app.get('/login', (req, res) => {
     res.render('login');
 })
 
 app.get('/users', (req, res) => {
-
     if (!Object.keys(req.query).length) {
         res.render('users', {users});
         return;
@@ -102,14 +103,17 @@ app.get('/users', (req, res) => {
 
     else {
         res.render('users', {users});
+        return;
     }
 
     res.render('users', {users: newUsers});
 });
 
+
 app.get('/user', (req, res) => {
     res.render('user', {user: signUser});
 });
+
 
 app.get('/error', (req, res) => {
     res.render('error', {email: wrongEmail});
@@ -158,12 +162,9 @@ app.post('/signIn', (req, res) => {
         signUser.push(find);
 
         res.redirect('/user');
+        return;
     }
-
-    else {
         res.redirect('/wrongSignIn');
-    }
-
 });
 
 app.use(methodOverride((req, res) => {
@@ -171,7 +172,7 @@ app.use(methodOverride((req, res) => {
     users.splice(indexUsers, 1);
     const indexSignUser = signUser.findIndex(value => value.email === req.body.email);
     signUser.splice(indexSignUser, 1);
-    res.redirect('users');
+    res.redirect('/users');
 }));
 
 app.use((req, res) => {
