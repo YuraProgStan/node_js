@@ -6,16 +6,56 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 95vh;
+
+        }
+
+        .wrap {
+            width: 500px;
+            background-color: cadetblue;
+            padding: 10px;
+        }
+        label{
+            color: white;
+        }
+
+        input {
+            margin:10px 0;
+            border: 0;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        }
+        button{
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+            background-color: gainsboro;
+            border-radius: 10px;
+            width: 100px;
+        }
+
+    </style>
 </head>
 <body>
-<form action="/login" method="post">
-  <label>First name:</label><input type="text" name="firstName">
-    <label>Last name:</label><input type="text" name="lastName">
-    <label>Email:</label><input type="text" name="email">
-    <label>Password:</label><input type="text" name="password">
-    <label>Age:</label><input type="number" name="age">
-    <label>City:</label><input type="text" name="city">
-    <button type="submit">OK</button>
-</form>
+<div class="container">
+    <div class="wrap">
+        <form action="/login" method="post">
+            <div><label>First name: </label><input type="text" name="firstName"></div>
+            <div><label>Last name: </label><input type="text" name="lastName"></div>
+            <div><label>Email: </label><input type="text" name="email"></div>
+            <div><label>Password: </label><input type="text" name="password"></div>
+            <div><label>Age: </label><input type="number" name="age"></div>
+            <div><label>City: </label><input type="text" name="city"></div>
+            <div>
+                <button type="submit">Registration</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
