@@ -13,6 +13,7 @@
 const express = require('express');
 const path = require('path');
 const {engine} = require('express-handlebars');
+const methodOverride = require('method-override');
 
 // const users = [
 //     {
@@ -64,39 +65,53 @@ const {engine} = require('express-handlebars');
 const users = [];
 let wrongEmail = '';
 const signUser = [];
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'static')));
-const methodOverride = require('method-override');
+
 app.use(methodOverride('_method'));
 app.set('view engine', '.hbs');
 app.engine('.hbs', engine({defaultLayout: ''}));
 app.set('views', path.join(__dirname, 'static'));
+
 app.get('/login', (req, res) => {
     res.render('login');
 })
+
 app.get('/users', (req, res) => {
+
     if (!Object.keys(req.query).length) {
         res.render('users', {users});
         return;
     }
+
     let newUsers = [...users];
+
     if (req.query.age && req.query.city) {
         newUsers = newUsers.filter(value => value.age === req.query.age && value.city === req.query.city);
-    } else if (req.query.age) {
+    }
+
+    else if (req.query.age) {
         newUsers = newUsers.filter(value => value.age === req.query.age)
-    } else if (req.query.city) {
+    }
+
+    else if (req.query.city) {
         newUsers = newUsers.filter(value => value.city === req.query.city)
-    } else {
+    }
+
+    else {
         res.render('users', {users});
     }
+
     res.render('users', {users: newUsers});
 });
 
 app.get('/user', (req, res) => {
     res.render('user', {user: signUser});
 });
+
 app.get('/error', (req, res) => {
     res.render('error', {email: wrongEmail});
 });
@@ -104,11 +119,13 @@ app.get('/error', (req, res) => {
 app.get('/users/:userId', ({params}, res) => {
     // const user = [users[userId - 1]];
     const user = users.find(value => value.id === +params.userId);
+
     if (!user) {
         wrongEmail = `User with id: ${params.userId} does not exist`;
         res.redirect('/error');
         return;
     }
+
     res.render('user', {user: [user]});
 });
 
@@ -123,13 +140,17 @@ app.get('/wrongSignIn', (req, res) => {
 
 app.post('/login', (req, res) => {
     const {body} = req;
+
     if (users.find(value => value.email === req.body.email)) {
         wrongEmail = `Write another email. This ${req.body.email} address is already in use`;
         res.redirect('/error');
-    } else {
+    }
+
+    else {
         users.push({...body, id: users.length ? users[users.length - 1].id + 1 : 1});
         res.redirect('/users');
     }
+
 });
 
 app.post('/signIn', (req, res) => {
@@ -138,7 +159,9 @@ app.post('/signIn', (req, res) => {
         signUser.push(find);
 
         res.redirect('/user');
-    } else {
+    }
+
+    else {
         res.redirect('/wrongSignIn');
     }
 
