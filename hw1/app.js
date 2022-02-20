@@ -13,61 +13,84 @@ const onlineUsers = [{name: 'Andrii', age: 22, city: 'Lviv'},
     {name: 'Sergii', age: 30, city: 'Kharkiv'}];
 const inPersonUsers = [{name: 'Oleg', age: 32, city: 'Odessa'},
     {name: 'Oksana', age: 25, city: 'Kyiv'},
-    {name: 'Maksim', age: 31, city: 'Poltava'}]
+    {name: 'Maksim', age: 31, city: 'Poltava'}];
+const mainPath = path.join(__dirname, 'main');
 
-    fs.mkdir(path.join(__dirname, 'main'), (err) => {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-        const folderFileArrayWrite = (folder, file, arr) => {
-            fs.mkdir(path.join(__dirname, 'main', folder), (err) => {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                const pathUsers = path.join(__dirname, 'main', folder, file);
-                fs.writeFile(pathUsers, '', (err) => {
-                    if (err) {
-                        console.log(err);
-                        throw err;
-                    }
-                    arr.map(value => fs.appendFile(pathUsers,
-                        `NAME:${value.name}, AGE:${value.age}, CITY: ${value.city}\n`, (err) => {
-                            if (err) {
-                                console.log(err);
-                                throw err;
-                            }
-                        }))
-                    if (folder === 'inPerson') {
-                        changeUsers()
-                    }
-                })
-            })
-        }
-        folderFileArrayWrite('online', 'onlineUsers.txt', onlineUsers);
-        folderFileArrayWrite('inPerson', 'inPersonUsers.txt', inPersonUsers);
-    })
-
-const changeUsers = () => {
-    fs.rename(path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), (err) => {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-        fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), (err) => {
+fs.mkdir(mainPath, (err) => {
+    if (err) {
+        console.log(err);
+        throw err;
+    }
+    const folderFileArrayWrite = (folder, file, arr) => {
+        fs.mkdir(path.join(mainPath, folder), (err) => {
             if (err) {
                 console.log(err);
                 throw err;
             }
-            fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), (err) => {
+            const pathUsers = path.join(mainPath, folder, file);
+            const data = arr.map(({name, age, city}) => `NAME: ${name}\nAGE: ${age}\nCITY: ${city}\n\n`).join('');
+            fs.writeFile(pathUsers, data, (err) => {
                 if (err) {
                     console.log(err);
                     throw err;
                 }
+                if (folder === 'inPerson') {
+                    changeUsers()
+                }
             })
         })
-    });
+    }
+    folderFileArrayWrite('online', 'onlineUsers.txt', onlineUsers);
+    folderFileArrayWrite('inPerson', 'inPersonUsers.txt', inPersonUsers);
+})
+
+const changeUsers = () => {
+    let data1, data2;
+    fs.readFile(path.join(mainPath, 'online', 'onlineUsers.txt'), 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        data1 = data;
+        fs.readFile(path.join(mainPath, 'inPerson', 'inPersonUsers.txt'), 'utf8', (err, data) => {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            data2 = data;
+            fs.appendFile(path.join(mainPath, 'online', 'onlineUsers.txt'), data2, {flag: 'w'}, err => {
+                if (err) {
+                    console.log(err);
+                    throw  err;
+                }
+            });
+            fs.appendFile(path.join(mainPath, 'inPerson', 'inPersonUsers.txt'), data1, {flag: 'w'}, err => {
+                if (err) {
+                    console.log(err);
+                    throw  err;
+                }
+            });
+        })
+
+    })
+    // fs.rename(path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), (err) => {
+    //     if (err) {
+    //         console.log(err);
+    //         throw err;
+    //     }
+    //     fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), path.join(__dirname, 'main', 'online', 'onlineUsers.txt'), (err) => {
+    //         if (err) {
+    //             console.log(err);
+    //             throw err;
+    //         }
+    //         fs.rename(path.join(__dirname, 'main', 'inPerson', 'inPersonUsersTemp.txt'), path.join(__dirname, 'main', 'inPerson', 'inPersonUsers.txt'), (err) => {
+    //             if (err) {
+    //                 console.log(err);
+    //                 throw err;
+    //             }
+    //         })
+    //     })
+    // });
 }
 
 

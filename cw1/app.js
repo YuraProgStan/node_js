@@ -89,22 +89,37 @@ const changeFilesFolders = ()=>{
         }
         if(data){
             data.map(value => {
-                if(value.includes('.txt')){
+               /* if(value.includes('.txt')){
                     fs.truncate(path.join(__dirname, 'main3', value), err=>{
                         if (err) {
                             console.log(err);
                             throw err;
                         }
                     })
-                }
-                else {
-                    fs.rename(path.join(__dirname, 'main3', value), path.join(__dirname, 'main3', value+'_new'),err => {
-                        if (err) {
-                            console.log(err);
-                            throw err;
-                        }
-                    } )
-                }
+                }*/
+                fs.stat(path.join(__dirname, 'main3',value), (err, data)=> {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+
+                    if (data.isFile()) {
+                        fs.truncate(path.join(__dirname, 'main3', value), err => {
+                            if (err) {
+                                console.log(err);
+                                throw err;
+                            }
+                        })
+                    }
+                    if (data.isDirectory()) {
+                        fs.rename(path.join(__dirname, 'main3', value), path.join(__dirname, 'main3', value + '_new'), err => {
+                            if (err) {
+                                console.log(err);
+                                throw err;
+                            }
+                        })
+                    }
+                })
             })
         }
     })
