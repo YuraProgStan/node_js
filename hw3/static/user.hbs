@@ -19,7 +19,7 @@
             <div>City: {{this.city}}</div>
         </div>
         <form action="/user" method="post">
-            <input type="hidden" name="email" value="{{this.email}}">
+            <input type="hidden" name="email" value="{{this.id}}">
             <input type="hidden" name="_method" value="delete"/>
             <button>DELETE USER VAR1</button>
         </form>

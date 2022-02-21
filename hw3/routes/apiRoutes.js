@@ -18,9 +18,9 @@ routes.use('/wrongSignIn',  wrongSignInRouter);
 routes.use('/user',  userRouter);
 
 routes.use(methodOverride((req, res) => {
-    const indexUsers = users.findIndex(value => value.email === req.body.email);
+    const indexUsers = users.findIndex(value => value.id === req.body.id);
     users.splice(indexUsers, 1);
-    const indexSignUser = signUser.findIndex(value => value.email === req.body.email);
+    const indexSignUser = signUser.findIndex(value => value.id === req.body.id);
     signUser.splice(indexSignUser, 1);
     res.redirect('/users');
 }));
