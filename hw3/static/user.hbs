@@ -21,10 +21,25 @@
         <form action="/user" method="post">
             <input type="hidden" name="email" value="{{this.email}}">
             <input type="hidden" name="_method" value="delete"/>
-            <button>DELETE USER</button>
+            <button>DELETE USER VAR1</button>
         </form>
-        {{/each}}
+        <button onclick={DelById({{this.id}})}>DELETE USER VAR2</button>
+    {{/each}}
 
 </div>
+<script>
+        const DelById = async function (userId){
+            const onPageChange = ()=> location.href ='/users';
+        try{
+           await Promise.all([
+               fetch(`http://localhost:5200/user/${userId}`,{
+                   method: 'DELETE',
+               }),
+               onPageChange()
+           ])
+          }catch (err){
+        console.log('Error:' + err)}
+        }
+</script>
 </body>
 </html>

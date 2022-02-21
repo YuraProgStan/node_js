@@ -1,4 +1,4 @@
-const {users, wrongEmail} = require('../db/state');
+const {wrongEmail} = require('../db/state');
 
 class errorController {
     errorRender(req, res)  {

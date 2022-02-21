@@ -50,7 +50,5 @@ const state = {
     wrongEmail:'',
     signUser: []
 }
-// const users = [];
-// let wrongEmail = '';
-// const signUser = [];
+
 module.exports = state;
