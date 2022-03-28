@@ -1,8 +1,8 @@
 import {
-    Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn,
+    Column, Entity, JoinColumn, OneToOne,
 } from 'typeorm';
 import { User } from './user';
-import {CommonFields} from "./commonFields";
+import { CommonFields } from './commonFields';
 
 export interface IToken {
     refreshToken: string;
@@ -11,9 +11,6 @@ export interface IToken {
 
 @Entity('Tokens', { database: 'okten' })
 export class Token extends CommonFields implements IToken {
-    @PrimaryGeneratedColumn()
-        id: number;
-
     @Column({
         type: 'varchar',
         width: 255,
