@@ -9,6 +9,9 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
     public async getComments(): Promise<IComment[]> {
         return getManager().getRepository(Comment).find();
     }
+    public async createComment(comment: IComment): Promise<IComment> {
+        return getManager().getRepository(Comment).save(comment);
+    }
 
     public async getCommentsByUserId(userId: number): Promise<IComment[]> {
         return getManager().getRepository(Comment)
@@ -18,7 +21,14 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
             .leftJoinAndSelect('comment.post', 'post')
             .getMany();
     }
-
+    public async getCommentById(id: number): Promise<IComment[]> {
+        return getManager().getRepository(Comment)
+            .createQueryBuilder('comment')
+            .where('comment.id = :id', { id: id })
+            .leftJoinAndSelect('comment.user', 'user')
+            .leftJoinAndSelect('comment.post', 'post')
+            .getMany();
+    }
     // eslint-disable-next-line consistent-return
     public async updateCommentAction(
         commentId: number,
@@ -39,16 +49,17 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
             }
 
             if (action === 'dislike') {
-                return query.update({ id: commentId }, { dislike: comment.like + 1 });
+                return query.update({ id: commentId }, { dislike: comment.dislike + 1 });
             }
         } catch (e) {
             console.log(e);
         }
+
     }
 
-    // public async updatePost(id: number, text: string): Promise<UpdateResult> {
-    //     return getManager().getRepository(Post).update({ id }, { text });
-    // }
+    public async updateComment(id: number, text: string, like: number, dislike: number ): Promise<UpdateResult> {
+        return getManager().getRepository(Comment).update( id , { text, like, dislike });
+    }
 // app.patch('/comments/action', async (req: Request, res: Response) => {
 //     try {
 //         const { action, commentId } = req.body;

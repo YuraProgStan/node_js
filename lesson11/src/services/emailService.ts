@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 import {config} from  '../config/config'
-import {emailActionEnum} from "../constants/enums";
+import {EmailActionEnum} from '../constants/';
 import {emailInfo} from "../constants";
 
 class EmailService {
-    sendMail(userMail: string, action: emailActionEnum) {
+    sendMail(userMail: string, action: EmailActionEnum) {
 const {subject, html} = emailInfo[action]
         const emailTransporter = nodemailer.createTransport( {
         from: 'No Reply Sep 2021',

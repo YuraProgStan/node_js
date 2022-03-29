@@ -1,10 +1,10 @@
 import {NextFunction, Request, Response} from 'express';
 import {authService, emailService, tokenService, userService} from '../services';
-import {COOKIE} from '../constants/cookie';
+import {COOKIE} from '../constants/';
 import {IRequestExtended, ITokenData} from '../interfaces';
 import {IUser} from '../entity/user';
 import {tokenRepository} from '../reporitories/token/tokenRepository';
-import {emailActionEnum} from "../constants";
+import {EmailActionEnum} from '../constants';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
@@ -16,7 +16,7 @@ class AuthController {
             { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
         );
         const {email} = req.body;
-        await emailService.sendMail(email, emailActionEnum.WELCOME_TO_PLATFORM);
+        await emailService.sendMail(email, EmailActionEnum.WELCOME_TO_PLATFORM);
         return res.json(data);
     }
 
@@ -35,7 +35,7 @@ class AuthController {
             const { id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            await emailService.sendMail(email, emailActionEnum.WELCOME);
+            await emailService.sendMail(email, EmailActionEnum.WELCOME);
 
             await userService.compareUserPasswords(password, hashPassword);
 

@@ -3,7 +3,6 @@ import { userService, tokenService } from '../services';
 import { IRequestExtended } from '../interfaces';
 import {tokenRepository} from "../reporitories/token/tokenRepository";
 import {constants} from '../constants';
-import {authValidator} from '../validators/auth';
 import {ErrorHandler} from '../error/ErrorHandler';
 
 class AuthMiddleware {
@@ -41,7 +40,6 @@ class AuthMiddleware {
     }
 
     public async checkRefreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-        console.log(5);
         try {
             const refreshToken = req.get(constants.AUTHORIZATION);
             if (!refreshToken) {
@@ -74,38 +72,5 @@ class AuthMiddleware {
             });
         }
     }
-
-    //validators
-    public isLoginValid(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {error, value} = authValidator.login.validate(req.body);
-
-            if (error) {
-                next(new ErrorHandler(error.details[0].message));
-                return;
-            }
-
-            req.body = value;
-            next();
-        } catch (e) {
-            next(e);
-        }
-    }
-    public isRegistrationValid(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {error, value} = authValidator.registration.validate(req.body);
-
-            if (error) {
-                next(new ErrorHandler(error.details[0].message));
-                return;
-            }
-
-            req.body = value;
-            next();
-        } catch (e) {
-            next(e);
-        }
-    }
-
 }
 export const authMiddleware = new AuthMiddleware();

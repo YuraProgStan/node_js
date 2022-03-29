@@ -15,6 +15,9 @@ class UserService {
     public async getUserByEmail(email: string): Promise<IUser | undefined> {
         return userRepository.getUserByEmail(email);
     }
+    public async getUserById(id: number): Promise<IUser | undefined> {
+        return userRepository.getUserById(id);
+    }
 
     public async getUsers(): Promise<IUser[]> {
         return userRepository.getUsers();

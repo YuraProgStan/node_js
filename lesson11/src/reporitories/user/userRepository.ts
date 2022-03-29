@@ -17,6 +17,14 @@ class UserRepository extends Repository<User> implements IUserRepository {
             .andWhere('user.deletedAt IS NULL')
             .getOne();
     }
+    public async getUserById(id: number): Promise<IUser | undefined> {
+        console.log(id);
+        return getManager().getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.id = :id', { id })
+            .andWhere('user.deletedAt IS NULL')
+            .getOne();
+    }
 
     public async getUsers(): Promise<IUser[]> {
         return getManager().getRepository(User).find({ relations: ['posts'] });

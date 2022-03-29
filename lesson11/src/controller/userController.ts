@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { IUser } from '../entity/user';
-import { userService } from '../services/userService';
-import {emailService} from "../services";
-import {emailActionEnum} from "../constants";
+import { userService } from '../services/';
+import {emailService} from '../services';
+import {EmailActionEnum} from '../constants';
 
 class UserController {
     public async createUser(req: Request, res: Response): Promise<Response<IUser>> {
@@ -25,7 +25,7 @@ class UserController {
         const { password, email } = req.body;
         const userId = Number(req.params.id);
         const updateUser = await userService.updateUser(userId, password, email);
-        await emailService.sendMail(email, emailActionEnum.UPDATE_DATA);
+        await emailService.sendMail(email, EmailActionEnum.UPDATE_DATA);
         return res.json(updateUser);
     }
 

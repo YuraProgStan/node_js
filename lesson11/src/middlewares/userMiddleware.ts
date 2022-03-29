@@ -18,6 +18,7 @@ class UserMiddleware {
             next(e);
         }
     }
+
 }
 
 export const userMiddleware = new UserMiddleware();

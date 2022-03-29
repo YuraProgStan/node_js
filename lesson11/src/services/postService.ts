@@ -1,10 +1,13 @@
-import { UpdateResult } from 'typeorm';
-import { IPost } from '../entity/post';
-import { postRepository } from '../reporitories/post/postRepository';
+import {UpdateResult} from 'typeorm';
+import {IPost} from '../entity/post';
+import {postRepository} from '../reporitories/post/postRepository';
 
 class PostService {
     public async getPosts(): Promise<IPost[]> {
         return postRepository.getPosts();
+    }
+    public async createPost(post:IPost): Promise<IPost> {
+        return postRepository.createPost(post);
     }
 
     public async getPostByUserId(userId:number): Promise<IPost | undefined> {
