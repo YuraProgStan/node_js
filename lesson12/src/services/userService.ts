@@ -22,6 +22,12 @@ class UserService {
     public async getUsers(): Promise<IUser[]> {
         return userRepository.getUsers();
     }
+    public async updateUserFP(id: number, obj: Partial<IUser>): Promise<object | undefined> {
+        if(obj.password){
+            obj.password = await this._hashPassword(obj.password);
+        }
+        return userRepository.updateUserFP(id, obj);
+    }
 
     public async updateUser(id: number, password: string, email: string): Promise<UpdateResult> {
         const hashedPassword = await this._hashPassword(password);

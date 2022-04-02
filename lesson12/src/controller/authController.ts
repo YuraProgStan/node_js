@@ -1,10 +1,11 @@
 import {NextFunction, Request, Response} from 'express';
 import {authService, emailService, tokenService, userService} from '../services';
-import {COOKIE} from '../constants/';
+import {COOKIE, EmailActionEnum} from '../constants/';
 import {IRequestExtended, ITokenData} from '../interfaces';
 import {IUser} from '../entity/user';
 import {tokenRepository} from '../reporitories/token/tokenRepository';
-import {EmailActionEnum} from '../constants';
+import {actionTokenRepository} from '../reporitories/actionTokenRepository/actionTokenRepository';
+import {ActionTokenTypes} from '../enums/actionTokenTypes.enum';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
@@ -69,6 +70,41 @@ class AuthController {
 
         } catch (e) {
           next(e);
+        }
+    }
+    public  async sendForgotPassword (req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { id, email, firstName } = req.user as IUser;
+
+            const token = await tokenService.generateActionToken({userId: id, userEmail: email});
+
+            await actionTokenRepository.createActionToken({actionToken: token, type: ActionTokenTypes.forgotPassword,
+                userId:id });
+
+            await emailService.sendMail(email, EmailActionEnum.FORGOT_PASSWORD,{
+                token,
+                userName: firstName
+            });
+
+            res.sendStatus(204);
+
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public  async setPassword (req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.user as IUser;
+            const actionToken= req.get('Authorization');
+
+            await userService.updateUserFP(id, req.body)
+            await actionTokenRepository.deleteByParams({actionToken});
+
+            res.sendStatus(201);
+
+        } catch (e) {
+            next(e);
         }
     }
 }

@@ -123,5 +123,37 @@ class ValidateMiddleware {
             next(e);
         }
     }
+
+    public checkValidEmail(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {error, value} = authValidator.email.validate(req.body);
+
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public checkValidPassword(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {error, value} = authValidator.password.validate(req.body);
+
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 export const validateMiddleware = new ValidateMiddleware();

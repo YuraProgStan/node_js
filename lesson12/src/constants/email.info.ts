@@ -16,5 +16,10 @@ export const emailInfo = {
     [EmailActionEnum.UPDATE_DATA]: {
         subject: 'You apdated your registration data',
         templateName: 'updateEmailPass'
+    },
+    [EmailActionEnum.FORGOT_PASSWORD]: {
+        subject: 'dont worry, update your password',
+        templateName: 'forgotPassword'
     }
+
 }

@@ -7,23 +7,25 @@ import { createConnection } from 'typeorm';
 
 import { apiRouter } from './router/apiRouter';
 import { config } from './config/config';
-import path from 'path';
-import {engine} from "express-handlebars";
+// import path from 'path';
+// import {engine} from "express-handlebars";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.set('view engine', '.hbs');
-app.engine('.hbs', engine({defaultLayout: false}));
-app.set('views', path.join(__dirname, 'email-templates'));
-// // @ts-ignore
+// app.set('view engine', '.hbs');
+// app.engine('.hbs', engine({defaultLayout: false}));
+// app.set('views', path.join(__dirname, 'email-templates-hbs'));
+
+
+// @ts-ignore
 // app.engine('hbs', exphbs({
 //     // defaultLayout: 'index',
 //     extname: 'hbs',
-//     layoutsDir: path.join(__dirname, 'email-templates/layouts'),
-//     partialsDir: path.join(__dirname, 'email-templates'),
+//     layoutsDir: path.join(__dirname, 'email-templates-hbs/layouts'),
+//     partialsDir: path.join(__dirname, 'email-templates-hbs'),
 // }));
 
 app.use(apiRouter);

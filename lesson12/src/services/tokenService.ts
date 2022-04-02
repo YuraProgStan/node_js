@@ -6,8 +6,12 @@ import {ITokenPair, IUserPayload} from '../interfaces';
 
 class TokenService {
     public  generateTokenPair(payload: IUserPayload): ITokenPair {
-        const accessToken = jwt.sign(payload, config.SECRET_ACCESS_KEY as string, { expiresIn: '15m' });
-        const refreshToken = jwt.sign(payload, config.SECRET_REFRESH_KEY as string, { expiresIn: '1d' });
+        const accessToken = jwt.sign(payload,
+            config.SECRET_ACCESS_KEY as string,
+            { expiresIn: config.EXPIRES_IN_ACCESS });
+        const refreshToken = jwt.sign(payload,
+            config.SECRET_REFRESH_KEY as string,
+            { expiresIn: config.EXPIRES_IN_REFRESH });
 
         return {
             accessToken,
@@ -41,8 +45,15 @@ class TokenService {
         if (tokenType === 'refresh') {
             secretWord = config.SECRET_REFRESH_KEY;
         }
-
+        if (tokenType === 'action') {
+            secretWord = config.SECRET_ACTION_KEY;
+        }
         return jwt.verify(authToken, secretWord as string) as IUserPayload;
+    }
+    public  generateActionToken(payload: IUserPayload): string {
+        return jwt.sign(payload, config.SECRET_ACTION_KEY, { expiresIn: config.EXPIRES_IN_ACTION });
+
+
     }
 }
 
