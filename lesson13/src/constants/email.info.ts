@@ -1,0 +1,29 @@
+import {EmailActionEnum} from './enums';
+
+export const emailInfo = {
+    [EmailActionEnum.WELCOME]: {
+        subject: 'Welcome to SEP-2021',
+        templateName: 'welcome'
+    },
+    [EmailActionEnum.ACCOUNT_BLOCKED]: {
+        subject: 'You account was blocked',
+        templateName: 'accountBlocked'
+    },
+    [EmailActionEnum.WELCOME_TO_PLATFORM]: {
+        subject: 'Welocme to our platform',
+        templateName: 'welcomeRegistration'
+    },
+    [EmailActionEnum.UPDATE_DATA]: {
+        subject: 'You apdated your registration data',
+        templateName: 'updateEmailPass'
+    },
+    [EmailActionEnum.FORGOT_PASSWORD]: {
+        subject: 'dont worry, update your password',
+        templateName: 'forgotPassword'
+    },
+    [EmailActionEnum.REGISTRATION_CRON]: {
+        subject: 'List for all registration',
+        templateName: 'registrationCron'
+    }
+
+}
