@@ -11,4 +11,5 @@ router.use('/auth', authRouter);
 router.use('/posts', postRouter);
 router.use('/comments', commentRouter);
 
+
 export const apiRouter = router;

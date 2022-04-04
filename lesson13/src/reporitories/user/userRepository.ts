@@ -36,7 +36,7 @@ class UserRepository extends Repository<User> implements IUserRepository {
     }
 
     public async getUsers(): Promise<IUser[]> {
-        return getManager().getRepository(User).find({ relations: ['posts'] });
+        return getManager().getRepository(User).find({  relations: ['posts'] });
     }
 
     public async updateUser(id: number, firstName: string, lastName: string, age: number, phone: string): Promise<UpdateResult> {
