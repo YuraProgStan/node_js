@@ -48,18 +48,16 @@ class EmailService {
             viewEngine: {
                 extname: '.hbs',
                 defaultLayout: 'main',
-                layoutsDir: path.join(__dirname, '../', '../', 'email-templates-hbs','layouts'),
-                partialsDir: path.join(__dirname, '../', '../', 'email-templates-hbs','partials')
+                layoutsDir: path.resolve(__dirname,  '../', 'email-templates-hbs','layouts'),
+                partialsDir: path.resolve(__dirname, '../', 'email-templates-hbs','partials')
             },
-            viewPath: path.resolve(__dirname, '../', '../', 'email-templates-hbs'),
+            viewPath: path.resolve(__dirname, '../', 'email-templates-hbs'),
             extName: '.hbs',
         };
         emailTransporter.use('compile', hbs(handlebarOptions));
-        const {subject} = emailInfo[action];
-        return emailTransporter.sendMail({
-                to: userMail,
-                subject
-            });
+        const {subject, template} = emailInfo[action];
+        // @ts-ignore
+        return emailTransporter.sendMail({ to: userMail, subject, template, context });
     }
 }
 

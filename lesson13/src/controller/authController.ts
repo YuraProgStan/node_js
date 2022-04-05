@@ -36,7 +36,7 @@ class AuthController {
             const { password } = req.body;
 
             // await emailService.sendMail(email, EmailActionEnum.WELCOME, {userName: 'Yura'});
-            await emailService.sendMail(email, EmailActionEnum.WELCOME, {userName: 'Yura'});
+            await emailService.sendMailHBS(email, EmailActionEnum.WELCOME, {userName: 'Yura'});
 
             await userService.compareUserPasswords(password, hashPassword);
 
@@ -82,7 +82,7 @@ class AuthController {
             await actionTokenRepository.createActionToken({actionToken: token, type: ActionTokenTypes.forgotPassword,
                 userId:id });
 
-            await emailService.sendMail(email, EmailActionEnum.FORGOT_PASSWORD,{
+            await emailService.sendMailHBS(email, EmailActionEnum.FORGOT_PASSWORD,{
                 token,
                 userName: firstName
             });

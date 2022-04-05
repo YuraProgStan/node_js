@@ -22,8 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 // app.engine('.hbs', engine({defaultLayout: false}));
 // app.set('views', path.join(__dirname, 'email-templates-hbs'));
 
-// app.use(express.static('public'));
+ // app.use(express.static('public'));
 // app.use(express.static(path.join(__dirname, 'email-templates-hbs')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'email-templates-hbs'));
 app.engine('.hbs', engine({
