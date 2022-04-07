@@ -1,8 +1,8 @@
 import { IRequestExtended } from '../interfaces';
 import { constants } from '../constants';
 import {NextFunction, Response} from "express";
-import {ErrorHandler} from "../error/ErrorHandler";
-import {UploadedFile} from "express-fileupload";
+import {ErrorHandler} from '../error/ErrorHandler';
+import {UploadedFile} from 'express-fileupload';
 
 class FileMiddleware{
     async checkUserAvatar(req: IRequestExtended, res: Response, next: NextFunction){

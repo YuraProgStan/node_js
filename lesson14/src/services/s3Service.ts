@@ -27,7 +27,7 @@ class S3Service{
             Body: file.data,
             Key: uploadFilePath,
             ContentType: file.mimetype,
-            // ACL: 'public-read'
+            ACL: 'public-read'
             })
             .promise() //!!!!!!!!обязательно
     }
