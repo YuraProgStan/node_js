@@ -14,7 +14,7 @@ import { config } from './config/config';
 import { engine } from 'express-handlebars';
 import fileUpload from 'express-fileupload';
 // import {socketController} from "./controller/socketController";
-import {chatController} from "./controller/chatController";
+import {chatSocketController} from "./controller/chatSocketController";
 import cors from 'cors';
 
 const app = express();
@@ -61,7 +61,7 @@ io.on('connection', (chat: any)=> {
         let userName = chat.handshake.query.userName;
         const accessToken = chat.handshake.query.accessToken;
         userName = userName+'-'+accessToken.slice(-3, -1);
-        chatController.messageCreate(io,chat,data,userName)
+        chatSocketController.messageCreate(io,chat,data,userName)
     });
 })
 app.use(cors());
