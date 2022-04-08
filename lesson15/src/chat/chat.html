@@ -73,12 +73,12 @@
         }
         messagesHistory.innerHTML = history;
     })()
+
     //websocket
     const socket = io('http://localhost:5500', {query: `userId=9&userName=${userName}&accessToken=${accessToken}`});
     btn.onclick = () => {
         const messageArea = writeArea.value;
         socket.emit('message:create', {message: messageArea});
-
     }
     socket.on('message: get-all', (data) => {
         const title = document.createElement('h3');
