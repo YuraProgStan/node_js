@@ -1,12 +1,15 @@
 import {
-    Column, Entity,
+    Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
  import { CommonFields } from './commonFields';
+import {UserImage} from './userImage';
 
 export interface IChat {
     userChat: string;
     message: string;
     status: boolean;
+    userId: number;
+    urlImage?: string;
 }
 
 @Entity('Chat', { database: 'okten' })
@@ -29,4 +32,11 @@ export class Chat extends CommonFields implements IChat {
         type: 'boolean',
     })
     status: boolean;
+    @Column({
+        type: 'int',
+    })
+    userId: number;
+    @ManyToOne(() => UserImage, (userImage) => userImage.user)
+    @JoinColumn({ name: 'userId' })
+    userImage: UserImage;
 }

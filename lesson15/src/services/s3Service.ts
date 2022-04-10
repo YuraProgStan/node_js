@@ -15,14 +15,10 @@ class S3Service{
      })
     }
 
-    uploadFile(file: UploadedFile, itemType: string, itemId: number): Promise<ManagedUpload.SendData>{
+   async uploadFile(file: UploadedFile, itemType: string, itemId: number): Promise<ManagedUpload.SendData>{
         const uploadFilePath = this.fileNameBuilder(file.name, itemType, itemId);
-        console.log('___________________________________');
-        console.log(uploadFilePath);
-        console.log(this.Bucket);
-        console.log('___________________________________');
 
-        return this.Bucket.upload({
+       return await this.Bucket.upload({
             Bucket: config.S3_NAME as string,
             Body: file.data,
             Key: uploadFilePath,
@@ -34,9 +30,9 @@ class S3Service{
 
     private fileNameBuilder(fileName: string, itemType: string, itemId: number): string{
         const fileExtension = path.extname(fileName); //.png
-
-    return `${itemType}/${itemId}/${uuidv4()}${fileExtension}`
+        return `${itemType}/${itemId}/${uuidv4()}${fileExtension}`
     }
+
 }
 
 export const s3Service = new S3Service();

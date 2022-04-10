@@ -28,6 +28,10 @@ export class CreateTableChat1649408618080 implements MigrationInterface {
                     name: 'status',
                     type: 'boolean',
                 },
+                {
+                    name: 'userId',
+                    type: 'int',
+                },
 
                 {
                     name: 'createdAt',
@@ -42,7 +46,6 @@ export class CreateTableChat1649408618080 implements MigrationInterface {
                     isNullable: true,
                 },
             ],
-
 
         }), true);
     }

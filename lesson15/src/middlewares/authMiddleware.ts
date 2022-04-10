@@ -10,6 +10,9 @@ class AuthMiddleware {
     public async checkAccessToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const accessToken = req.get(constants.AUTHORIZATION);
+
+            // const accessToken = req.headers.authorization;
+
             if (!accessToken) {
                 next(new Error('No token'));
                 return;
@@ -18,11 +21,11 @@ class AuthMiddleware {
 
             const tokenPairFromDB = await tokenRepository.findByParams({ accessToken });
 
+
             if(!tokenPairFromDB){
                 next(new ErrorHandler('Token not valid', 401))
                 return;
             }
-
             const userFromToken = await userService.getUserByEmail(userEmail);
 
             if (!userFromToken) {
@@ -90,7 +93,6 @@ class AuthMiddleware {
                 next (new Error('Token not valid'));
                 return;
             }
-
             const userFromToken = await userService.getUserByEmail(userEmail);
 
             if (!userFromToken) {

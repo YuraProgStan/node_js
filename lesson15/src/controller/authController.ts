@@ -7,6 +7,7 @@ import {tokenRepository} from '../reporitories/token/tokenRepository';
 import {actionTokenRepository} from '../reporitories/actionTokenRepository/actionTokenRepository';
 import {ActionTokenTypes} from '../enums/actionTokenTypes.enum';
 import {UploadedFile} from "express-fileupload";
+import {userImageService} from "../services/userImageService";
 
 class AuthController {
     public async registration(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -24,14 +25,16 @@ class AuthController {
             // UPLOAD PHOTO
             if(avatar){
                const sendData = await s3Service.uploadFile(avatar, 'user', createdUser.id);
+                const userId = createdUser.id;
+                const url = sendData.Location;
+                try {
+                    await userImageService.createUserImage({url, userId});
 
-               console.log('__________________________');
-               console.log(sendData.Location);
-               console.log('__________________________');
-               //UPDATE USER
+                } catch (e) {
+                    next(e)
+                }
+
             }
-            // /photos/users/6787567/avatar22.jpg - пример пути для хранения фоток
-            // UPDATE USER
 
 
             const tokenData = await authService.registration(createdUser);
@@ -64,17 +67,21 @@ class AuthController {
             const { id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            // await emailService.sendMail(email, EmailActionEnum.WELCOME, {userName: 'Yura'});
             await emailService.sendMailHBS(email, EmailActionEnum.WELCOME, {userName: 'Yura'});
 
             await userService.compareUserPasswords(password, hashPassword);
 
            const tokenPair =  tokenService.generateTokenPair({userId: id, userEmail: email});
            const { refreshToken, accessToken } = tokenPair;
-           await tokenRepository.createToken({refreshToken, accessToken, userId:id })
+           await tokenRepository.createToken({refreshToken, accessToken, userId:id });
+
+            // @ts-ignore
+            const {url} = await userImageService.getUserImageByUserId(id);
+            const urlImage = url;
             res.json({
                 refreshToken,
                 accessToken,
+                urlImage,
                 user: req.user
             });
         } catch (e) {

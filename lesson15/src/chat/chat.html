@@ -9,87 +9,42 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>Document</title>
-    <style>
-        .container {
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
 
-        .chat {
-            width: 400px;
-            min-height: 800px;
-        }
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
 
-        #writeArea {
-            width: 380px;
-            font-size: 18px;
-        }
-
-        #messageInsert,  #messagesHistory{
-            width: 400px;
-            background-color: #eeeeee;
-        }
-        #messagesHistory{
-            background-color: #d1e9f8;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
-    <div class="chat">
-        <h1>Chat</h1>
-        <div id="messagesHistory"></div>
-        <div id="messageInsert"></div>
-        <div><textarea id="writeArea">Write text</textarea></div>
-        <button id="sendMessage">SEND</button>
+    <div class="wrapperChat">
+        <div class="chat">
+            <h2>Chat</h2>
+            <button id="logout">Logout</button>
+            <button class="scrollDown">Scroll down</button>
+
+
+            <div id="messagesHistory"></div>
+            <div id="messageInsert"></div>
+            <div><textarea id="writeArea">Write text</textarea></div>
+            <button id="sendMessage">SEND</button>
+        </div>
+        <button class="scrollDown">Scroll down</button>
+        <button class="scrollUp">Scroll up</button>
+    </div>
+    <div id="rooms">
+        <h2>Rooms</h2>
+        <div id="room1"><h3>Rooom1</h3></div>
+        <button id="btn-room1">Connect room1</button>
+        <div><textarea id="writeAreaRoom1">Write text</textarea></div>
+        <button id="sendMessageRoom1">SEND</button>
+        <div id="room2"><h3>Rooom2</h3></div>
+        <button id="btn-room2">Connect room2</button>
+        <div><textarea id="writeAreaRoom2">Write text</textarea></div>
+        <button id="sendMessageRoom2">SEND</button>
+
     </div>
 </div>
-<script>
-    const item = 'Chat';
-    const dataLocal = JSON.parse(localStorage.getItem(item));
-    const {userName, accessToken} = dataLocal;
-    const btn = document.getElementById('sendMessage');
-    const writeArea = document.getElementById('writeArea');
-    const messageInsert = document.getElementById('messageInsert');
-    const messagesHistory = document.getElementById('messagesHistory');
-    //Get axios
-    (async () => {
-        const res = axios({
-            method: 'get',
-            url: 'http://localhost:5500/chat',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Credentials': true
-            },
-        });
-        const {data} = await res;
-        console.log(data);
-        let history = '';
-        for (const chatElement of data) {
-            history += `<h3>${chatElement.userChat}</h3><p>${chatElement.message}</p><hr/>`
-        }
-        messagesHistory.innerHTML = history;
-    })()
-
-    //websocket
-    const socket = io('http://localhost:5500', {query: `userId=9&userName=${userName}&accessToken=${accessToken}`});
-    btn.onclick = () => {
-        const messageArea = writeArea.value;
-        socket.emit('message:create', {message: messageArea});
-    }
-    socket.on('message: get-all', (data) => {
-        const title = document.createElement('h3');
-        const p = document.createElement('p');
-        title.innerHTML = data.messages.userName;
-        p.innerHTML = data.messages.message + '<hr/>';
-        messageInsert.append(title, p);
-        writeArea.value = "";
-    })
-
-</script>
+<script src='./index.js'></script>
 
 
 </body>

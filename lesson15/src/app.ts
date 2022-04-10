@@ -60,9 +60,21 @@ io.on('connection', (chat: any)=> {
     chat.on('message:create', (data: any)=> {
         let userName = chat.handshake.query.userName;
         const accessToken = chat.handshake.query.accessToken;
+        const userId = chat.handshake.query.userId;
+        const userImage = chat.handshake.query.userImage;
         userName = userName+'-'+accessToken.slice(-3, -1);
-        chatSocketController.messageCreate(io,chat,data,userName)
+        chatSocketController.messageCreate(io,chat,data,userName,userId,userImage );
+
     });
+    chat.on('join_room', (data: any)=>{
+        let userName = chat.handshake.query.userName;
+        const accessToken = chat.handshake.query.accessToken;
+        const userId = chat.handshake.query.userId;
+        const userImage = chat.handshake.query.userImage;
+        userName = userName+'-'+accessToken.slice(-3, -1);
+        chatSocketController.joinRoom(io,chat,data,userName,userId,userImage);
+    });
+
 })
 app.use(cors());
 app.use(fileUpload());
