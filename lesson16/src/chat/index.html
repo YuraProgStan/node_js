@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Authorization chat</title>
+
+</head>
+<body>
+<form action="/someaction" name="f">
+    <label for="email">Email:</label><br>
+    <input type="text" value="email" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="text" value="password" id="password" name="password">
+    <button>Login</button>
+    <div id="status"></div>
+</form>
+<script>
+    const f = document.forms.f;
+    f.onsubmit = function (e) {
+        e.preventDefault();
+        const email = this.email.value;
+        const password = this.password.value;
+        const obj = {email, password};
+        const jsonObj = JSON.stringify(obj);
+        (async () => {
+            const res = axios({
+                method: 'post',
+                url: 'http://localhost:5500/auth/login',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Credentials': true
+                },
+                data: jsonObj
+            });
+            const {data} = await res;
+            const {accessToken, refreshToken, urlImage, user} = data;
+            const {id} = user
+            let status = document.getElementById('status');
+
+            if (!user) {
+                status.innerText = 'You can\'t login';
+            } else {
+                status.innerText = 'Ok';
+                location="./chat.html";
+            }
+            const localObj = {accessToken, refreshToken, userName: user.firstName,userId: id,urlImage}
+            const item = 'Chat';
+            const saveData = (array) => {
+                localStorage.removeItem('item');
+                localStorage.setItem(item, JSON.stringify(localObj))
+            }
+            saveData(localObj);
+            // localStorage.setItem('chat', data);
+            console.log(data);
+        })()
+
+        // (async () => {
+        //     const rawResponse = await fetch('http://localhost:5500/auth/login', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json;charset=utf-8'
+        //         },
+        //         body: JSON.stringify(obj)
+        //     });
+        //     const content = await rawResponse.json();
+        //     console.log(content);        })()
+    }
+</script>
+</body>
+</html>
