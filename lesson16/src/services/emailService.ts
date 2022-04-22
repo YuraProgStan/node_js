@@ -8,10 +8,9 @@ const hbs = require('nodemailer-express-handlebars');
 class EmailService {
     templateRenderer = new EmailTemplate({
         views:{
-          root: path.join(path.join(__dirname, '../', 'email-templates')),
-                 // options: {extension: 'hbs'},
-        },
-
+            root: path.join(path.join(__dirname, '../','email-templates')),
+            // options: {extension: 'hbs'}
+        }
     });
     async sendMail(userMail: string, action: EmailActionEnum, context:{} = {}): Promise<SentMessageInfo> {
         const {subject, template} = emailInfo[action];
